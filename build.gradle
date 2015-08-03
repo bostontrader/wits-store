@@ -5,7 +5,10 @@ repositories {
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.12'
+
+
+	// WITStore needs to deal with command line arguments.
 	compile 'commons-cli:commons-cli:1.1'
+
     testCompile 'junit:junit:4.12'
 }

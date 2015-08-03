@@ -1,12 +1,14 @@
 package com.fyrecloud.wits;
 
+import java.util.logging.Logger;
+
 //import java.io.IOException;
 //import java.net.ServerSocket;
 
 //import org.apache.commons.cli.BasicParser;
 //import org.apache.commons.cli.CommandLine;
 //import org.apache.commons.cli.CommandLineParser;
-//import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 //import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -55,18 +57,31 @@ public class WITStore {
 	 */
 	//public static int listeningPort = WITSCMADefaultPort;
 
+	public static final String TERMINATED = "WITStore has terminated.";
+	public static final String DISPLAYED_HELP_SCREEN = "The help screen was displayed.";
 
 	public static void main(String[] args) {
+	    Logger logger = Logger.getLogger(WITStore.class.getName());
+	    new WITStore().start(args, logger);
+	}
 
-		// 1. Build the model of command line options
+	/**
+	 * This is how we really start the program.  It gives us a chance
+	 * to inject a logger for testing.
+	 */
+	public void start(String[] args, Logger logger) {
+
+        // 1. Build the model of command line options
 		buildCLIOptions();
 
 		// 2. If no command line arguments then print the help screen and exit.
 		//    It's not feasible to expect to be able to execute this class solely on default
 		//    values because this class will at least need to know how to access the
 		//    database.
-		//if (args.length < 1)
-			//printHelp();
+		if (args.length < 1) {
+			logHelp(logger);
+		    logger.info(TERMINATED);
+		}
 
 		// 3. Now parse the command line
 		//try {
@@ -116,12 +131,12 @@ public class WITStore {
 	}
 
 	/**
-	 * This method will print the help screen.
+	 * This method will log the help screen.
 	 */
-	//private static void printHelp() {
-		//HelpFormatter formatter = new HelpFormatter();
-		//formatter.printHelp( "WITStore", CLIOptions );
-		//System.exit(0);
-	//}
+	private static void logHelp(Logger logger) {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp( "WITStore", clOptions, true );
+	    logger.info(DISPLAYED_HELP_SCREEN);
+	}
 
 }
