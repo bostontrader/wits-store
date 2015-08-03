@@ -1,5 +1,6 @@
 package com.fyrecloud.wits;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
@@ -53,5 +54,23 @@ public class WITStoreTest {
 	    //assertThat(loggerSpy.messages, hasItem(WITStore.DISPLAYED_HELP_SCREEN));
 	    //assertThat(loggerSpy.messages, hasItem(WITStore.TERMINATED));
     }
-	
+
+	// If we invoke the program with no args, will the default port be
+	// properly set?
+	@Test public void testDefaultPort() {
+	    WITStore w = new WITStore();
+		assertThat(w.listeningPort,equalTo(WITStore.WITS_DEFAULT_PORT));
+	}
+
+	// If we invoke the program with the port arg, will the listeningPort
+	// be properly set?
+	// properly set?
+	@Test public void testSetListeningPort() {
+		LoggerSpy loggerSpy = new LoggerSpy();
+	    Logger logger = Logger.getLogger(WITStore.class.getName());
+	    logger.addHandler(loggerSpy);
+	    WITStore w = new WITStore();
+	    w.start(new String[]{"-port","5555"}, logger);
+		assertThat(w.listeningPort,equalTo(5555));
+	}
 }

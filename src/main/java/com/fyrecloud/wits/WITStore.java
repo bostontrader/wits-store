@@ -10,7 +10,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-//import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.UnrecognizedOptionException;
@@ -50,12 +50,12 @@ public class WITStore {
 	/**
 	 * What port is the WITS store default port?
 	 */
-	//public static int WITSCMADefaultPort = 4444;
+	public static final int WITS_DEFAULT_PORT = 4444;
 
 	/**
 	 * What port is the WITS store listening on?
 	 */
-	//public static int listeningPort = WITSCMADefaultPort;
+	public int listeningPort = WITS_DEFAULT_PORT;
 
 	public static final String TERMINATED = "WITStore has terminated.";
 	public static final String DISPLAYED_HELP_SCREEN = "The help screen was displayed.";
@@ -81,6 +81,7 @@ public class WITStore {
 		if (args.length < 1) {
 			printHelp(logger);
 		    logger.info(TERMINATED);
+		    return;
 		}
 
 		// 3. Now parse the command line
@@ -92,17 +93,19 @@ public class WITStore {
 			// help screen and exit.
 			printHelp(logger);
 		    logger.info(TERMINATED);
+		    return;
 		} catch(ParseException e) {
 			// 3.2. If the command line cannot be parsed then print the
 			// help screen and exit.  Note: Cannot test this because I cannot determine
 			// specific args that will break the parser.
 			printHelp(logger);
 		    logger.info(TERMINATED);
+		    return;
 		}
 
 		// 4. Determine which port this instance of WITStore should listen on
-		//if (cmd.hasOption("port"))
-			//listeningPort = Integer.parseInt(cmd.getOptionValue("port"));
+		if (cmd.hasOption("port"))
+			listeningPort = Integer.parseInt(cmd.getOptionValue("port"));
 
 		//boolean listening = true;
 		//try {
@@ -128,10 +131,10 @@ public class WITStore {
 		clOptions = new Options();
 		clOptions.addOption(new Option("help", "Print this help message."));
 
-		//OptionBuilder.withArgName( "port" );
-		//OptionBuilder.hasArg();
-		//OptionBuilder.withDescription("The port that WITSCMA will listen to.  Default = "+ Integer.toString(WITSCMADefaultPort));
-		//CLIOptions.addOption(OptionBuilder.create("port"));
+		OptionBuilder.withArgName( "port" );
+		OptionBuilder.hasArg();
+		OptionBuilder.withDescription("The port that WITStore will listen to.  Default = "+ Integer.toString(WITS_DEFAULT_PORT));
+		clOptions.addOption(OptionBuilder.create("port"));
 	}
 
 	/**
