@@ -5,15 +5,15 @@ import java.util.logging.Logger;
 //import java.io.IOException;
 //import java.net.ServerSocket;
 
-//import org.apache.commons.cli.BasicParser;
-//import org.apache.commons.cli.CommandLine;
-//import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 //import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-//import org.apache.commons.cli.ParseException;
-//import org.apache.commons.cli.UnrecognizedOptionException;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.UnrecognizedOptionException;
 
 /**
  * 
@@ -45,7 +45,7 @@ public class WITStore {
 	/**
 	 * An object to model the command line, after parsing.
 	 */
-	//private static CommandLine cmd = null;
+	private static CommandLine cmd = null;
 
 	/**
 	 * What port is the WITS store default port?
@@ -79,22 +79,26 @@ public class WITStore {
 		//    values because this class will at least need to know how to access the
 		//    database.
 		if (args.length < 1) {
-			logHelp(logger);
+			printHelp(logger);
 		    logger.info(TERMINATED);
 		}
 
 		// 3. Now parse the command line
-		//try {
-			//CommandLineParser parser = new BasicParser();
-			//cmd = parser.parse( CLIOptions, args);
-		//} catch(UnrecognizedOptionException e) {
+		try {
+			CommandLineParser parser = new BasicParser();
+			cmd = parser.parse( clOptions, args);
+		} catch(UnrecognizedOptionException e) {
 			// 3.1. If an option is not recognized then print the
 			// help screen and exit.
-			//printHelp();
-		//} catch(ParseException e) {
-			//e.printStackTrace();
-			//System.exit(-1);
-		//}
+			printHelp(logger);
+		    logger.info(TERMINATED);
+		} catch(ParseException e) {
+			// 3.2. If the command line cannot be parsed then print the
+			// help screen and exit.  Note: Cannot test this because I cannot determine
+			// specific args that will break the parser.
+			printHelp(logger);
+		    logger.info(TERMINATED);
+		}
 
 		// 4. Determine which port this instance of WITStore should listen on
 		//if (cmd.hasOption("port"))
@@ -131,11 +135,11 @@ public class WITStore {
 	}
 
 	/**
-	 * This method will log the help screen.
+	 * This method will print the help screen and log the fact that it has done so.
 	 */
-	private static void logHelp(Logger logger) {
+	private static void printHelp(Logger logger) {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp( "WITStore", clOptions, true );
+		formatter.printHelp( WITStore.class.getName(), clOptions, true );
 	    logger.info(DISPLAYED_HELP_SCREEN);
 	}
 
