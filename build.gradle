@@ -9,6 +9,6 @@ dependencies {
 
 	// WITStore needs to deal with command line arguments.
 	compile 'commons-cli:commons-cli:1.1'
-
+	compile 'com.googlecode.json-simple:json-simple:1.1.1'
     testCompile 'junit:junit:4.12'
 }
