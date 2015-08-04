@@ -1,8 +1,5 @@
 package com.fyrecloud.wits;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 import static org.junit.Assert.fail;
 
@@ -15,19 +12,17 @@ public class ServerThreadTest {
 
 		ServerThread serverThread;
 		try {
-			// 1. Create a server thread.  When started, it will listen on the port
-			// and block until something connects. The server will then read from the client,
-			// send a reply, then shutdown.  But don't start yet.
+			// 1. Create, but don't yet start, a server thread.  When started, the thread
+			// will listen on the port and block until something connects. The server 
+			// will then enter a loop whereby it reads from the client and sends a reply,
+			// until it receives the special shut-down code word. 
 			serverThread = new ServerThread();
 
 			// 2. Create a mock client thread. When started, it will immediately connect
-			// to the server, send to the server, read a reply from the server, and then shutdown.
+			// to the server and enter a similar loop whereby the client will send to the
+			// server and read a reply from the server, until the client decides to shutdown.
 			// We will use a CountDownLatch to make the JUnit thread wait
 			// until the client is finished.
-
-			// If the client wants to do more communication then it needs to 
-			// start another connection.
-
 			CountDownLatch doneSignal = new CountDownLatch(1);
 			MockClient mockClient = new MockClient(doneSignal);
 

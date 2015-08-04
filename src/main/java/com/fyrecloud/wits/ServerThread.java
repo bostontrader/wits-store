@@ -21,8 +21,8 @@ public class ServerThread extends Thread {
 	    	this.clientSocket = srvr.accept(); // block until client connects
 
 	    	// 2. Obtain IO streams for the socket.
-			PrintWriter toClient = new PrintWriter(clientSocket.getOutputStream(), true);
-			BufferedReader fromClient = new BufferedReader(
+			PrintWriter pwToClient = new PrintWriter(clientSocket.getOutputStream(), true);
+			BufferedReader brFromClient = new BufferedReader(
 				new InputStreamReader(
 					clientSocket.getInputStream()
 				)
@@ -30,17 +30,17 @@ public class ServerThread extends Thread {
 
 			// KKP Example from 
 			// http://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
-			String inputLine, outputLine;
+			String sInputFromClient, sOutputToClient;
 
 			 // Initiate conversation with client
-		    KnockKnockProtocol kkp = new KnockKnockProtocol();
-		    outputLine = kkp.processInput(null);
-		    toClient.println(outputLine);
+		    MockProtocol kkp = new MockProtocol();
+		    sOutputToClient = kkp.processInput(null);
+		    pwToClient.println(sOutputToClient);
 
-		    while ((inputLine = fromClient.readLine()) != null) {
-		        outputLine = kkp.processInput(inputLine);
-		        toClient.println(outputLine);
-		        if (outputLine.equals("Bye."))
+		    while ((sInputFromClient = brFromClient.readLine()) != null) {
+		    	sOutputToClient = kkp.processInput(sInputFromClient);
+		        pwToClient.println(sOutputToClient);
+		        if (sOutputToClient.equals("Bye."))
 		            break;
 		    }
 
