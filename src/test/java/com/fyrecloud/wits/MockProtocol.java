@@ -1,6 +1,7 @@
 package com.fyrecloud.wits;
 
 public class MockProtocol {
+	public static final String HELLO = "HELLO";
     private static final int WAITING = 0;
 	private static final int SENTKNOCKKNOCK = 1;
 	//private static final int SENTCLUE = 2;
@@ -24,7 +25,7 @@ public class MockProtocol {
         String theOutput = null;
 
         if (state == WAITING) {
-        	theOutput = "Knock! Knock!";
+        	theOutput = HELLO;
         	state = SENTKNOCKKNOCK;
         } else if (state == SENTKNOCKKNOCK) {
            	theOutput = "keep talkin'";

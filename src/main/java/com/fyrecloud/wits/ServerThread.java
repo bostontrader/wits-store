@@ -6,12 +6,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 public class ServerThread extends Thread {
 
-	private Socket clientSocket = null;
+	private Socket clientSocket;
+	private final Logger logger;
 
-	public ServerThread() {}
+	public ServerThread(Logger logger) {
+		this.logger = logger;
+	}
 
 	public void run() {
 		try (
@@ -35,10 +39,13 @@ public class ServerThread extends Thread {
 			 // Initiate conversation with client
 		    MockProtocol kkp = new MockProtocol();
 		    sOutputToClient = kkp.processInput(null);
+		    logger.info("Server: " + sOutputToClient);
 		    pwToClient.println(sOutputToClient);
 
 		    while ((sInputFromClient = brFromClient.readLine()) != null) {
+			    logger.info("Client: " + sInputFromClient);
 		    	sOutputToClient = kkp.processInput(sInputFromClient);
+			    logger.info("Server: " + sOutputToClient);
 		        pwToClient.println(sOutputToClient);
 		        if (sOutputToClient.equals("Bye."))
 		            break;

@@ -12,6 +12,7 @@ import java.util.concurrent.CountDownLatch;
 public class MockClient implements Runnable{
 
 	private final CountDownLatch doneSignal;
+
 	MockClient(CountDownLatch doneSignal) {
 		this.doneSignal = doneSignal;
 	}
@@ -31,13 +32,15 @@ public class MockClient implements Runnable{
             BufferedReader in = new BufferedReader(
             	new InputStreamReader(kkSocket.getInputStream()));
             ) {
-                BufferedReader stdIn =
-                    new BufferedReader(new InputStreamReader(System.in));
+                //BufferedReader stdIn =
+                    //new BufferedReader(new InputStreamReader(System.in));
                 String sFromServer;
                 String sFromUser;
 
                 while ((sFromServer = in.readLine()) != null) {
-                    System.out.println("Server: " + sFromServer);
+                    //System.out.println("Server: " + sFromServer);
+        		    //logger.info("Server: " + sFromServer);
+
                     if (sFromServer.equals("Bye."))
                         break;
                     
@@ -45,7 +48,7 @@ public class MockClient implements Runnable{
                     sFromUser = messages.get(idx++);
 
                     if (sFromUser != null) {
-                        System.out.println("Client: " + sFromUser);
+                        //System.out.println("Client: " + sFromUser);
                         pwToServer.println(sFromUser);
                     }
                 }
